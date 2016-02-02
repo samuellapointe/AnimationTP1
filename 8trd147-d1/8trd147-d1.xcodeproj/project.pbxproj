@@ -274,6 +274,7 @@
 				GCC_THREADSAFE_STATICS = YES;
 				INFOPLIST_FILE = "resources/8trd147-d1-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "8trd147-d1";
 			};
 			name = Debug;
@@ -291,6 +292,7 @@
 				GCC_THREADSAFE_STATICS = YES;
 				INFOPLIST_FILE = "resources/8trd147-d1-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "8trd147-d1";
 			};
 			name = Release;
