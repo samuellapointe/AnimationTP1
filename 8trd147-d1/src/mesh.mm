@@ -189,13 +189,14 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
     int bufsz = 256;
     char  buf[bufsz];
     string line;
+    string endHeader = "end_header";
     vector<string> words;
     nb_tri = nb_vtx = 0;
-     
+    
     f_in.getline(buf, bufsz, '\n');
-    line = buf;    
+    line = buf;
 
-    while ( (line != "end_header") && !f_in.eof() )
+    while ( (line.compare(0, endHeader.length(), endHeader) != 0) && !f_in.eof() )
     {
         split(line, words);
         if ( words[0] == "element"  && words[1] == "vertex" )
@@ -205,7 +206,7 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
             nb_tri = atoi(words[2].c_str());
         
         f_in.getline(buf, bufsz, '\n');
-        line = buf;    
+        line = buf;
     }
     return nb_tri != 0 && nb_vtx != 0;
 }
@@ -221,7 +222,7 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
     string line;
     vector<string> words;
     int nb_tri, nb_vtx;
-    
+
     if ( !ReadPLYHeader(f_in, nb_vtx, nb_tri) )
         return false;
     
