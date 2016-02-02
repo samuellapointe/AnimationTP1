@@ -7,12 +7,15 @@
 //
 
 #include <iostream>
+#include "PlyGenerator.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
-    for(int i = 0; i < argc; i++) {
-        std::cout << argv[i];
-    }
+    std::cout << "Début\n";
+    
+    char fileName[] = "x.ply";
+    PlyGenerator plyGenerator = PlyGenerator(fileName);
+    
+    std::cout << "Fin\n";
+    
     return 0;
 }
