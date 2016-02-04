@@ -31,3 +31,8 @@ PlyGenerator::PlyGenerator(char fileName[])
     plyFile.close();
     cout << "Le fichier " << this->fileName << " a bien été écrit." << endl;
 }
+
+void PlyGenerator::generateRevolutionSurface()
+{
+    
+}
