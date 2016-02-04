@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC37A70D1C613F5400FD2458 /* PlyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC37A70C1C613F5400FD2458 /* PlyGenerator.cpp */; settings = {ASSET_TAGS = (); }; };
+		EC37A7101C61404500FD2458 /* point3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC37A70E1C61404500FD2458 /* point3d.cpp */; settings = {ASSET_TAGS = (); }; };
 		ECBB416C1C5FF97D0073B2B8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECBB416B1C5FF97D0073B2B8 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +25,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EC37A70B1C613F3100FD2458 /* PlyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlyGenerator.h; sourceTree = "<group>"; };
+		EC37A70C1C613F5400FD2458 /* PlyGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlyGenerator.cpp; sourceTree = "<group>"; };
+		EC37A70E1C61404500FD2458 /* point3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = point3d.cpp; sourceTree = "<group>"; };
+		EC37A70F1C61404500FD2458 /* point3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = point3d.h; sourceTree = "<group>"; };
 		ECBB41681C5FF97D0073B2B8 /* Partie1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Partie1; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECBB416B1C5FF97D0073B2B8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,7 +63,11 @@
 		ECBB416A1C5FF97D0073B2B8 /* Partie1 */ = {
 			isa = PBXGroup;
 			children = (
+				EC37A70E1C61404500FD2458 /* point3d.cpp */,
+				EC37A70F1C61404500FD2458 /* point3d.h */,
 				ECBB416B1C5FF97D0073B2B8 /* main.cpp */,
+				EC37A70B1C613F3100FD2458 /* PlyGenerator.h */,
+				EC37A70C1C613F5400FD2458 /* PlyGenerator.cpp */,
 			);
 			path = Partie1;
 			sourceTree = "<group>";
@@ -119,6 +129,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECBB416C1C5FF97D0073B2B8 /* main.cpp in Sources */,
+				EC37A70D1C613F5400FD2458 /* PlyGenerator.cpp in Sources */,
+				EC37A7101C61404500FD2458 /* point3d.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +247,7 @@
 				ECBB41711C5FF97D0073B2B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
