@@ -30,13 +30,4 @@ PlyGenerator::PlyGenerator(char fileName[])
     // Fermeture du fichier
     plyFile.close();
     cout << "Le fichier " << this->fileName << " a bien été écrit." << endl;
-    
-    
-    
-    
-    //test
-    std::ofstream ofs;
-    ofs.open ("/Laboratoire/Utilisateurs/etudiant/Bureau/AnimationTP1/test.txt", std::ofstream::out | std::ofstream::app);
-    ofs << " more lorem ipsum";
-    ofs.close();
 }

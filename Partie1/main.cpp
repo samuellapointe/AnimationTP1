@@ -12,7 +12,7 @@
 int main(int argc, const char * argv[]) {
     std::cout << "Début\n";
     
-    char fileName[] = "x.ply";
+    char fileName[] = "/Users/etudiant/Desktop/x/test/AnimationTP1/x.ply";
     PlyGenerator plyGenerator = PlyGenerator(fileName);
     
     std::cout << "Fin\n";
