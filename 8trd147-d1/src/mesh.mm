@@ -155,6 +155,13 @@ void    CMesh::AllocVBOData()
 {
     //**
     // C'est ici que vous devez créer le VBO à partir de listes de sommets et de triangles.
+    GLuint buffer_id[2];
+    glGenBuffers(2, buffer_id);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_id[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_id[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangles), &triangles, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &vao_id);
 }
 
 
@@ -292,8 +299,23 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
 
 void CMesh::Draw(GLint prog)
 {
+    cout << "draw ";
     //**
     // Cette fonction est appelée à chaque fois qu'il est nécessaire de dessiner le maillage.
+    glBindVertexArray(vao_id);
+    
+    attrib_position = glGetAttribLocation(prog, "pos");
+    glEnableVertexAttribArray(attrib_position);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
+    
+    glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, 7, 0);
+    
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    
+    glDisableVertexAttribArray(attrib_position);
+    
 }
 
 
