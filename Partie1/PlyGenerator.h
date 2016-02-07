@@ -11,20 +11,25 @@
 
 #include "point3d.h"
 #include <vector>
+#include <string>
 
 using namespace std;
 
 class PlyGenerator
 {
 private:
-    CPoint3D test;
-    char* fileName;
+    string fileName;
+    int surfaceType = 0;
+    int delta = 0;
+    int y = 0;
     vector<CPoint3D> vertices;
     
-    void generateRevolutionSurface();
+    void generateVertices();
     
 public:
-    PlyGenerator(char[]);
+    PlyGenerator(vector<string>);
+    
+    string generateFile();
 };
 
 #endif /* PlyGenerator_h */
