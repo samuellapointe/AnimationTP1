@@ -311,8 +311,8 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
 
 
 //** Vous aurez éventuellement à changer ces valeurs pour que votre maillage s'affiche correctement.
-static float scale = 40.0;
-static float yoffset = -3.0;
+static float scale = 1.0;
+static float yoffset = 0.0;
 bool CMesh::ReadPLY(std::ifstream& f_in)
 {
     int bufsz = 256;

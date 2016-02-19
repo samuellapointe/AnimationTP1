@@ -254,7 +254,7 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 
 		glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-        glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     
 		
  	}
