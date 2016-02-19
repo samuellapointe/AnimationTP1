@@ -20,11 +20,17 @@ class PlyGenerator
 private:
     string fileName;
     int surfaceType = 0;
-    int delta = 0;
-    int y = 0;
+    float delta = 0;
+    float y = 0;
     vector<CPoint3D> vertices;
+    //vector<int, int, int> faces;
+    
+    typedef float (*fctgen_ptr)(const float& y);
+    CPoint3D surfrevol(const float&, const float&, fctgen_ptr);
     
     void generateVertices();
+    
+    string getVerticesToString();
     
 public:
     PlyGenerator(vector<string>);

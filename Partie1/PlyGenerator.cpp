@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include "PlyGenerator.h"
 
 using namespace std;
@@ -45,8 +46,8 @@ PlyGenerator::PlyGenerator(vector<string> commandTokens)
      */
     
     surfaceType = stoi(commandTokens[1]);
-    delta = stoi(commandTokens[2]);
-    y = stoi(commandTokens[3]);
+    delta = stof(commandTokens[2]);
+    y = stof(commandTokens[3]);
     fileName = commandTokens[4];
 }
 
@@ -63,8 +64,21 @@ string PlyGenerator::generateFile()
     if(!plyFile.is_open())
         return "Erreur lors de l'ouverture du fichier " + fileName;
     
-    // Écriture du fichier
-    plyFile << "TEST";
+    // Écriture de l'entête
+    plyFile << "ply\n" <<
+        "format ascii 1.0\n" <<
+        "comment this file is a revolution surface\n" <<
+        "element vertex " << vertices.size() << "\n" <<
+        "property float x\n" <<
+        "property float y\n" <<
+        "property float z\n" <<
+        //"element face 6\n" <<
+        "end_header\n";
+    
+    // Écriture des vertices
+    plyFile << getVerticesToString();
+    
+    // Écriture de faces
     
     // Fermeture du fichier
     plyFile.close();
@@ -72,9 +86,71 @@ string PlyGenerator::generateFile()
     return "Le fichier " + fileName + " a bien été écrit.";
 }
 
+string PlyGenerator::getVerticesToString()
+{
+    string result = "";
+    for(size_t index = 0; index < vertices.size(); index++)
+    {
+        result += to_string(vertices[index][0]) + " "
+                + to_string(vertices[index][1]) + " "
+                + to_string(vertices[index][2]) + "\n";
+    }
+    return result;
+}
+
+float surface1(const float& x)
+{
+    return sin(sqrt(1-(x*x)));
+}
+
+float surface2(const float& x)
+{
+    return sin(sqrt(1-(x)));
+}
+
+float surface3(const float& x)
+{
+    return sin(x + M_PI_2);
+}
+
 void PlyGenerator::generateVertices()
 {
-    // Seulement un point de test
-    CPoint3D x = CPoint3D(1.0, 1.0, 1.0);
-    vertices.push_back(x);
+    // Test
+    //CPoint3D x = CPoint3D(1.0, 1.0, 1.0);
+    
+    float maxY = 0;
+    fctgen_ptr f;
+    if(surfaceType == 1)
+    {
+        maxY = 1;
+        f = surface1;
+    }
+    else if(surfaceType == 2)
+    {
+        maxY = 1;
+        f = surface2;
+    }
+    else if(surfaceType == 3)
+    {
+        maxY = (float)M_PI / (float)2;
+        f = surface3;
+    }
+    else
+        return;
+    
+    for(float currentDelta = 0; currentDelta <= (float)360; currentDelta += delta)
+    {
+        for(float currentY = 0; currentY <= (float)maxY; currentY += y)
+        {
+            CPoint3D x = surfrevol(currentDelta, currentY, f);
+            vertices.push_back(x);
+        }
+    }
+}
+
+CPoint3D PlyGenerator::surfrevol(const float& theta, const float &y, fctgen_ptr f)
+{
+    CPoint3D p = CPoint3D(f(y)*cos(theta), y, f(y)*sin(theta));
+    
+    return p;
 }

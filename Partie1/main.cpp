@@ -70,15 +70,9 @@ void executeCommand(string command)
     cout << resultat << endl;
 }
 
+// Commande: gensurfevol 1 30 0.2 /Users/etudiant/Desktop/AnimationTP1/y.ply
 int main(int argc, const char * argv[]) {
     std::cout << "Début" << endl;
-    
-    //char fileName[] = "/Users/etudiant/Desktop/Animation/AnimationTP1/x.ply";
-    //PlyGenerator plyGenerator = PlyGenerator(fileName);
-    
-    //PlyGenerator plyGenerator = PlyGenerator(readCommand());
-    
-    //readCommand();
     
     // L'utilisateur entre des commandes jusqu'à ce
     // qu'il entre q ou Q.
