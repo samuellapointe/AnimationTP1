@@ -41,8 +41,7 @@ void print_debug(const CPoint3D& P)
 CVect3D CVertex::UpdateNormal()
 { 
 
-    //**
-    // À faire : mise à jour du vecteur normal à partir  des triangles.
+    CVect3D N = CPoint3D(-P[1],P[0],P[2]);
     
     return N;
 }
@@ -118,7 +117,11 @@ ostream& operator<<(ostream& os, const CMesh& m)
 
 void    CMesh::UpdateNormals()
 { 
-    //**
+    list<CTriangle*>::const_iterator monIt;
+    for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
+    {
+        (*monIt)->UpdateNormal();
+    }
 }
 
 // Format du VBO: 
@@ -158,7 +161,7 @@ GLuint vao_id;
 GLuint ogl_buf_index_id;
 GLint attrib_position, attrib_normal, attrib_color;
 
-int sz_vertice = 10;
+/*int sz_vertice = 10;
 GLfloat mesVertices[] =
 {
     // Sommet 0
@@ -186,7 +189,7 @@ GLfloat mesVertices[] =
 GLint mesIndices[] = {
     0, 1, 3, // Triangle 1
     1, 2, 3  // Triangle 2
-};
+};*/
 
 void    CMesh::AllocVBOData()
 {
@@ -200,10 +203,10 @@ void    CMesh::AllocVBOData()
     
     // Transfert des données vers la carte graphique.
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(mesVertices), mesVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size(), &vertices, GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(mesIndices), mesIndices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size(), &triangles, GL_STATIC_DRAW);
 }
 
 
@@ -235,7 +238,7 @@ int split(const string& line, vector<string>& words)
 static 
 bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
 {
-    /*int bufsz = 256;
+    int bufsz = 256;
     char  buf[bufsz];
     string line;
     string endHeader = "end_header";
@@ -257,7 +260,7 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
         f_in.getline(buf, bufsz, '\n');
         line = buf;
     }
-    return nb_tri != 0 && nb_vtx != 0;*/
+    return nb_tri != 0 && nb_vtx != 0;
 }
 
 
@@ -266,7 +269,7 @@ static float scale = 40.0;
 static float yoffset = -3.0;
 bool CMesh::ReadPLY(std::ifstream& f_in)
 {
-    /*int bufsz = 256;
+    int bufsz = 256;
     char  buf[bufsz];
     string line;
     vector<string> words;
@@ -333,7 +336,7 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
     }
     
     UpdateNormals();
-    */
+    
     AllocVBOData();
     return true;
 }
@@ -342,25 +345,27 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
 void CMesh::Draw(GLint prog)
 {
     
-    attrib_position = glGetAttribLocation(prog, "P");
-    attrib_normal = glGetAttribLocation(prog, "N0");
-    attrib_color = glGetAttribLocation(prog, "C0");
+    attrib_position = glGetAttribLocation(prog, "pos");
+    //attrib_normal = glGetAttribLocation(prog, "N0");
+    //attrib_color = glGetAttribLocation(prog, "C0");
     
     glBindVertexArray(vao_id);
     
     glEnableVertexAttribArray(attrib_position);
-    glEnableVertexAttribArray(attrib_normal);
-    glEnableVertexAttribArray(attrib_color);
+    //glEnableVertexAttribArray(attrib_normal);
+    //glEnableVertexAttribArray(attrib_color);
     
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
     
-    int stride = 10*sizeof(GLfloat);
-    glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
-    glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
-    glVertexAttribPointer(attrib_color, 4, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
+    //int stride = 6*sizeof(GLfloat);
+    glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, 3, 0);
+    //glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
+    //glVertexAttribPointer(attrib_color, 4, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
     
-    glDrawElements(GL_TRIANGLES, sizeof(mesIndices), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    cout << triangles.size();
+    
+    glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
 
