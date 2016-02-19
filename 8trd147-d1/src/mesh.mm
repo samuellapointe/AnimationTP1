@@ -153,8 +153,20 @@ GLuint* put_triangle(const CTriangle& tri, GLuint* p)
 
 void    CMesh::AllocVBOData()
 {
-    //**
-    // C'est ici que vous devez créer le VBO à partir de listes de sommets et de triangles.
+    glGenVertexArrays(1, &vao_id);
+    glBindVertexArray(vao_id);
+    
+    // Conversion en VBO.
+    
+    glGenBuffers(1, &ogl_buf_vextex_id);
+    glGenBuffers(1, &ogl_buf_index_id);
+    
+    // Transfert des données vers la carte graphique.
+    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size(), &vertices, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size(), &triangles, GL_STATIC_DRAW);
 }
 
 
@@ -292,8 +304,26 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
 
 void CMesh::Draw(GLint prog)
 {
-    //**
-    // Cette fonction est appelée à chaque fois qu'il est nécessaire de dessiner le maillage.
+    
+    attrib_position = glGetAttribLocation(prog, "P");
+    attrib_normal = glGetAttribLocation(prog, "N0");
+    attrib_color = glGetAttribLocation(prog, "C0");
+    
+    glBindVertexArray(vao_id);
+    
+    glEnableVertexAttribArray(attrib_position);
+    glEnableVertexAttribArray(attrib_normal);
+    glEnableVertexAttribArray(attrib_color);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
+    
+    int stride = 8*sizeof(GLfloat);
+    glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
+    glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
+    glVertexAttribPointer(attrib_color, 4, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
+    
+    glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
 

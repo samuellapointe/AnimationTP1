@@ -110,7 +110,7 @@ protected:
     GLuint ogl_buf_vextex_id;       // VBO
     GLuint vao_id;
     GLuint ogl_buf_index_id;    
-    GLint attrib_position, attrib_normal, attrib_texcoord;
+    GLint attrib_position, attrib_normal, attrib_texcoord, attrib_color;
         
     std::vector<CVertex*>    vertices;
     std::list<CTriangle*>    triangles;
