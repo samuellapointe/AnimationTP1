@@ -118,6 +118,9 @@ protected:
         
     std::vector<CVertex*>    vertices;
     std::list<CTriangle*>    triangles;
+    
+    std::vector<float>    tmpVertices;
+    std::vector<float>    tmpTriangles;
 
     void    UpdateNormals();
 };
