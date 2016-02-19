@@ -39,11 +39,9 @@ void print_debug(const CPoint3D& P)
 
 
 CVect3D CVertex::UpdateNormal()
-{ 
-
-    //**
-    // À faire : mise à jour du vecteur normal à partir  des triangles.
-    
+{
+    CVect3D N = CPoint3D(-P[1],P[0],P[2]);
+        
     return N;
 }
 
@@ -115,10 +113,13 @@ ostream& operator<<(ostream& os, const CMesh& m)
 }
 
 
-
 void    CMesh::UpdateNormals()
-{ 
-    //**
+{
+    list<CTriangle*>::const_iterator monIt;
+    for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
+    {
+        (*monIt)->UpdateNormal();
+    }
 }
 
 // Format du VBO: 
@@ -153,8 +154,7 @@ GLuint* put_triangle(const CTriangle& tri, GLuint* p)
 
 void    CMesh::AllocVBOData()
 {
-    //**
-    // C'est ici que vous devez créer le VBO à partir de listes de sommets et de triangles.
+    
 }
 
 

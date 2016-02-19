@@ -11,8 +11,7 @@ uniform vec3 cam_pos;
 in vec4     pos;
 in vec3     N0;
 
-//**
-// Il manque une variable
+vec3 light
 
 out vec3 N;
 out vec3 V;
@@ -21,10 +20,13 @@ out vec3 var_light_pos;
 
 void main (void)
 {
-    //**
-    // Transformez les attributs.
+    light = light_pos;
     
-	gl_Position	= modelview_proj_matrix*pos;
+    var_light_pos = normalize(light - pos);
+    V = normalize(-pos);
+    N = normal_matrix*normalize(N0);
+    
+    gl_Position	= modelview_proj_matrix*pos;
 }
 
 

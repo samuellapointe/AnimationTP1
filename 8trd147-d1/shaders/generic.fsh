@@ -1,8 +1,14 @@
 #version 410
 
 
-//**
-// Il manque des variables...   ;-)
+vec3 H;
+vec4 ambiant;
+vec4 diffuse;
+vec4 specular;
+vec4 Color;
+
+float factorLN;
+float factorNH;
 
 out vec4    frag_color;
 
@@ -24,8 +30,19 @@ in vec3 cam_eye;
 
 void main (void)
 {
-    //**
-    // Implémenter phong.
-     
-    frag_color = vec4(0.5, 0.5, 0.5, 1.0);
+    H = normalize(var_light_pos + V);
+    ambiant = ambiant_contrib;
+    
+    factorLN = max(dot(var_light_pos,N),0.0);
+    diffuse = factorLN * diffuse_contrib;
+    
+    factorNH = pow(max(dot(N,H),0.0),mat_shininess);
+    specular = factorNH * spec_contrib;
+    
+    if(dot(var_light_pos,N) < 0.0)
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+    
+    Color = (ambiant + diffuse + specular);
+    
+    frag_color = Color;
 }
