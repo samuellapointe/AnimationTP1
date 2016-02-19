@@ -50,73 +50,17 @@ enum {
 #define NULL 0
 #endif
 
-// Variables OpenGL
-GLuint shader_prog_name;
-GLuint uniform_mvp_matrix_idx;
-GLuint uniform_normal_matrix_idx;
 
-GLuint diffuse_tex_id;          // Texture
-GLuint ogl_buf_vextex_id;       // VBO
-GLuint vao_id;
-GLuint ogl_buf_index_id;
-GLint attrib_position, attrib_normal, attrib_color;
-
-int sz_vertice = 10;
-GLfloat vertices[] =
-{
-    // Sommet 0
-    -1.0, 0.0, 0.0,     // Pos
-    -1.0, 1.0, 0.0,     // N
-    1.0, 0.0, 0.0, 1.0, // Couleur
-    
-    // Sommet 1
-    0.0, 1.0, 0.5,
-    0.0, 1.0, 0.0,
-    1.0, 1.0, 0.0, 1.0,
-    
-    // Sommet 2
-    1.0, 0.0, 0.0,
-    1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0,
-    
-    // Sommet 3
-    0.0, 1.0, -0.5,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0, 1.0,
-};
-
-// Tableau d'indice.
-GLint indices[] = {
-    0, 1, 3, // Triangle 1
-    1, 2, 3  // Triangle 2
-};
-
-
-
-void    alloc_vbo()
-{
-    glGenVertexArrays(1, &vao_id);
-    glBindVertexArray(vao_id);
-    
-    // Conversion en VBO.
-    
-    glGenBuffers(1, &ogl_buf_vextex_id);
-    glGenBuffers(1, &ogl_buf_index_id);
-    
-    // Transfert des données vers la carte graphique.
-    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-}
 
 
 
 @implementation CRenderer
 
 // Variable globales (c'est pas idéal, mais c'est un prototype).
+GLuint shader_prog_name;
+GLint uniform_mvp_matrix_idx;
 GLint uniform_model_view_matrix_idx;
+GLint uniform_normal_matrix_idx;
 
 GLfloat light_pos[] = {0.0, 30.0, 30.0};
 GLfloat mat_ambiant[] = {0.2, 0.2, 0.2};
@@ -311,8 +255,7 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 		glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
         glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
-		
-        alloc_vbo();
+    
 		
  	}
 	
@@ -434,30 +377,16 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
     mtx3x3Invert(normal_matrix, normal_matrix);
     
     
-    glUseProgram(shader_prog_name);
+    if (mesh) {
+        glUseProgram(shader_prog_name);
+        
+        glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
+        glUniformMatrix3fv(uniform_normal_matrix_idx, 1, GL_FALSE, normal_matrix);
+        
+        mesh->Draw(shader_prog_name);
+
+    }
     
-    glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
-    glUniformMatrix3fv(uniform_normal_matrix_idx, 1, GL_FALSE, normal_matrix);
-    
-    attrib_position = glGetAttribLocation(shader_prog_name, "P");
-    attrib_normal = glGetAttribLocation(shader_prog_name, "N0");
-    attrib_color = glGetAttribLocation(shader_prog_name, "C0");
-    
-    glBindVertexArray(vao_id);
-    
-    glEnableVertexAttribArray(attrib_position);
-    glEnableVertexAttribArray(attrib_normal);
-    glEnableVertexAttribArray(attrib_color);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
-    
-    int stride = sz_vertice*sizeof(GLfloat);
-    glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
-    glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
-    glVertexAttribPointer(attrib_color, 4, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
-    
-    glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
 

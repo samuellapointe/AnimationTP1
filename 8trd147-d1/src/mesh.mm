@@ -151,6 +151,43 @@ GLuint* put_triangle(const CTriangle& tri, GLuint* p)
     return p;
 }
 
+// Variables OpenGL
+GLuint diffuse_tex_id;          // Texture
+GLuint ogl_buf_vextex_id;       // VBO
+GLuint vao_id;
+GLuint ogl_buf_index_id;
+GLint attrib_position, attrib_normal, attrib_color;
+
+int sz_vertice = 10;
+GLfloat mesVertices[] =
+{
+    // Sommet 0
+    -1.0, 0.0, 0.0,     // Pos
+    -1.0, 1.0, 0.0,     // N
+    1.0, 0.0, 0.0, 1.0, // Couleur
+    
+    // Sommet 1
+    0.0, 1.0, 0.5,
+    0.0, 1.0, 0.0,
+    1.0, 1.0, 0.0, 1.0,
+    
+    // Sommet 2
+    1.0, 0.0, 0.0,
+    1.0, 1.0, 0.0,
+    0.0, 1.0, 0.0, 1.0,
+    
+    // Sommet 3
+    0.0, 1.0, -0.5,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0, 1.0,
+};
+
+// Tableau d'indice.
+GLint mesIndices[] = {
+    0, 1, 3, // Triangle 1
+    1, 2, 3  // Triangle 2
+};
+
 void    CMesh::AllocVBOData()
 {
     glGenVertexArrays(1, &vao_id);
@@ -163,10 +200,10 @@ void    CMesh::AllocVBOData()
     
     // Transfert des données vers la carte graphique.
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size(), &vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(mesVertices), mesVertices, GL_STATIC_DRAW);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size(), &triangles, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(mesIndices), mesIndices, GL_STATIC_DRAW);
 }
 
 
@@ -198,7 +235,7 @@ int split(const string& line, vector<string>& words)
 static 
 bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
 {
-    int bufsz = 256;
+    /*int bufsz = 256;
     char  buf[bufsz];
     string line;
     string endHeader = "end_header";
@@ -220,7 +257,7 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
         f_in.getline(buf, bufsz, '\n');
         line = buf;
     }
-    return nb_tri != 0 && nb_vtx != 0;
+    return nb_tri != 0 && nb_vtx != 0;*/
 }
 
 
@@ -229,7 +266,7 @@ static float scale = 40.0;
 static float yoffset = -3.0;
 bool CMesh::ReadPLY(std::ifstream& f_in)
 {
-    int bufsz = 256;
+    /*int bufsz = 256;
     char  buf[bufsz];
     string line;
     vector<string> words;
@@ -296,7 +333,7 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
     }
     
     UpdateNormals();
-    
+    */
     AllocVBOData();
     return true;
 }
@@ -318,12 +355,12 @@ void CMesh::Draw(GLint prog)
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
     
-    int stride = 8*sizeof(GLfloat);
+    int stride = 10*sizeof(GLfloat);
     glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(0));
     glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
     glVertexAttribPointer(attrib_color, 4, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
     
-    glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLES, sizeof(mesIndices), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
 
 
