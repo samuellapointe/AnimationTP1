@@ -381,7 +381,7 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
         triangles.push_back(tri);
     }
     
-    //UpdateNormals();
+    UpdateNormals();
     
     AllocVBOData();
     return true;
@@ -393,13 +393,13 @@ void CMesh::Draw(GLint prog)
     
     attrib_position = glGetAttribLocation(prog, "P"); //Attribut de position dans le vertex shader
     attrib_normal = glGetAttribLocation(prog, "N0");
-    attrib_texcoord = glGetAttribLocation(prog, "C0");
+    //attrib_texcoord = glGetAttribLocation(prog, "C0");
     
     glBindVertexArray(vao_id); //Travailler sur ce tableau
     
     glEnableVertexAttribArray(attrib_position); //Activer l'attribut de position
     glEnableVertexAttribArray(attrib_normal);
-    glEnableVertexAttribArray(attrib_texcoord);
+    //glEnableVertexAttribArray(attrib_texcoord);
     
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id);
@@ -407,7 +407,7 @@ void CMesh::Draw(GLint prog)
     int stride = 8*sizeof(GLfloat);
     glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
-    glVertexAttribPointer(attrib_texcoord, 2, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
+    //glVertexAttribPointer(attrib_texcoord, 2, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
     
     cout << triangles.size();
     
