@@ -42,7 +42,7 @@ void main (void)
     if(dot(var_light_pos,N) < 0.0)
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     
-    Color = (ambiant + diffuse + specular) + vec4(1, 0.5, 0, 1);
+    Color = (ambiant + diffuse + specular);
     
     frag_color = Color;
 }

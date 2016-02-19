@@ -38,11 +38,9 @@ void print_debug(const CPoint3D& P)
 
 
 
-CVect3D CVertex::UpdateNormal()
-{ 
-
+CVect3D CVertex::UpdateNormal() {
     CVect3D N = CPoint3D(-P[1],P[0],P[2]);
-    
+
     return N;
 }
 
@@ -114,9 +112,8 @@ ostream& operator<<(ostream& os, const CMesh& m)
 }
 
 
-
 void    CMesh::UpdateNormals()
-{ 
+{
     list<CTriangle*>::const_iterator monIt;
     for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
     {

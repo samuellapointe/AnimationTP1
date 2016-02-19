@@ -46,7 +46,6 @@ public:
     float u,v;                          // Coordonnées de texture.
     CPoint3D P;
 
-    
 };
 
 
