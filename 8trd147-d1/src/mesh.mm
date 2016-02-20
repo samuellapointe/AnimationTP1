@@ -39,7 +39,16 @@ void print_debug(const CPoint3D& P)
 
 
 CVect3D CVertex::UpdateNormal() {
-    CVect3D N = CPoint3D(-P[1],P[0],P[2]);
+    int nbTriangles = this->triangles.size();
+    CVect3D somme = CPoint3D();
+    
+    //Pour chaque triangle adjacent
+    list<CTriangle*>::const_iterator monIt;
+    for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt) {
+        somme += (*monIt)->N;
+    }
+    
+    CVect3D N = somme/nbTriangles;
 
     return N;
 }
@@ -114,11 +123,18 @@ ostream& operator<<(ostream& os, const CMesh& m)
 
 void    CMesh::UpdateNormals()
 {
+    //D'abord, calculer les vecteurs pour chaque triangle
     list<CTriangle*>::const_iterator monIt;
     for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
     {
         (*monIt)->UpdateNormal();
     }
+    
+    //Ensuite, pour chaque point, faire la moyenne des normales des triangles adjacents
+    for (int i = 0; i < vertices.size(); i++) {
+        vertices[i]->UpdateNormal();
+    }
+
 }
 
 // Format du VBO: 
