@@ -31,7 +31,7 @@ public:
         u(_u),
         v(_v),
         idx(_idx)
-    {this->P = P;}
+    {}
     
     std::list<CTriangle*>   triangles;  // Triangles adjacents.
     
@@ -44,7 +44,6 @@ public:
     int     idx;                        // Indice dans le mesh.
     CVect3D N;
     float u,v;                          // Coordonnées de texture.
-    CPoint3D P;
 
 };
 
@@ -68,10 +67,10 @@ public:
         
     friend std::ostream& operator<<(std::ostream&, const CTriangle&);
     
-    void UpdateNormal() 
-    { 
-        CVect3D vecteur1 = v0-v1;
-        CVect3D vecteur2 = v0-v2;
+    void UpdateNormal()
+    {
+        CVect3D vecteur1 = *v0-*v1;
+        CVect3D vecteur2 = *v0-*v2;
         
         N = ProdVect(vecteur1,vecteur2);
     }

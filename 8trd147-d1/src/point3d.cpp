@@ -9,7 +9,8 @@ const float CPoint3D::epsilon(0.00001F);
 
 // Main droite
 CVect3D ProdVect(const CVect3D& P, const CVect3D& Q) 
-{ 
+{
+    CVect3D dwadaw = CVect3D(P[1]*Q[2]-P[2]*Q[1], P[2]*Q[0]-P[0]*Q[2], P[0]*Q[1]-P[1]*Q[0]);
 	return CPoint3D(P[1]*Q[2]-P[2]*Q[1], P[2]*Q[0]-P[0]*Q[2], P[0]*Q[1]-P[1]*Q[0]);
 }
 

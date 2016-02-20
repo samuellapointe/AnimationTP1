@@ -287,6 +287,7 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 
 -(void)set_ambiant_contrib:(float)val
 {
+    glUseProgram(shader_prog_name);
     GLuint loc = glGetUniformLocation(shader_prog_name, "ambiant_contrib");
     glUniform1f(loc, val);
 }
@@ -309,10 +310,12 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 
 - (void)render:(CMesh*)mesh
 {
+    GLfloat viewdir_matrix[16];        // Matrice sans la translation (pour le cube map et le skybox).
     GLfloat model_view_matrix[16];
     GLfloat projection_matrix[16];
     GLfloat normal_matrix[9];
     GLfloat mvp_matrix[16];
+    GLfloat vp_matrix[16];
     
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -322,7 +325,14 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
     mtxRotateYApply(model_view_matrix, roty);
     mtxRotateZApply(model_view_matrix, rotz);
     
+    mtxLoadIdentity(viewdir_matrix);
+    mtxRotateXApply(viewdir_matrix, rotx);
+    mtxRotateYApply(viewdir_matrix, roty);
+    mtxRotateZApply(viewdir_matrix, rotz);
+    
     mtxMultiply(mvp_matrix, projection_matrix, model_view_matrix);
+    mtxMultiply(vp_matrix, projection_matrix, viewdir_matrix);
+    
     
     mtx3x3FromTopLeftOf4x4(normal_matrix, model_view_matrix);
     mtx3x3Invert(normal_matrix, normal_matrix);
@@ -332,7 +342,16 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
         glUseProgram(shader_prog_name);
         
         glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
+        glUniformMatrix4fv(uniform_model_view_matrix_idx, 1, GL_FALSE, model_view_matrix);
         glUniformMatrix3fv(uniform_normal_matrix_idx, 1, GL_FALSE, normal_matrix);
+        //glUniformMatrix3fv(uniform_viewdir_matrix_idx, 1, GL_FALSE, viewdir_matrix);
+        glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
+        
+        GLuint loc = glGetUniformLocation(shader_prog_name, "light_pos");
+        glUniform3f(loc, light_pos[0], light_pos[1], light_pos[2]);
+        
+        loc = glGetUniformLocation(shader_prog_name, "cam_pos");
+        glUniform3f(loc, normal_matrix[6], normal_matrix[7], normal_matrix[8]);
         
         mesh->Draw(shader_prog_name);
 
