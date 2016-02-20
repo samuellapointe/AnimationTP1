@@ -15,6 +15,13 @@
 
 using namespace std;
 
+struct Triangle
+{
+    int sommet1 = 0;
+    int sommet2 = 0;
+    int sommet3 = 0;
+};
+
 class PlyGenerator
 {
 private:
@@ -23,7 +30,7 @@ private:
     float delta = 0;
     float y = 0;
     vector<CPoint3D> vertices;
-    //vector<int, int, int> faces;
+    vector<Triangle> triangles;
     
     typedef float (*fctgen_ptr)(const float& y);
     CPoint3D surfrevol(const float&, const float&, fctgen_ptr);
@@ -31,6 +38,7 @@ private:
     void generateVertices();
     
     string getVerticesToString();
+    string getFacesToString();
     
 public:
     PlyGenerator(vector<string>);

@@ -70,7 +70,9 @@ void executeCommand(string command)
     cout << resultat << endl;
 }
 
-// Commande: gensurfevol 1 30 0.2 /Users/etudiant/Desktop/AnimationTP1/y.ply
+// Commande: gensurfevol 1 30 0.2 /Users/etudiant/Desktop/AnimationTP1/1.ply
+// Commande: gensurfevol 2 30 0.2 /Users/etudiant/Desktop/AnimationTP1/2.ply
+// Commande: gensurfevol 3 30 0.2 /Users/etudiant/Desktop/AnimationTP1/3.ply
 int main(int argc, const char * argv[]) {
     std::cout << "Début" << endl;
     
