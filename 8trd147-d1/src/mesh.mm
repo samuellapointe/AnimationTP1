@@ -181,10 +181,10 @@ void    CMesh::AllocVBOData()
     
     // Transfert des données vers la carte graphique.
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id); //Dire à openGL de travailler sur le tampon de sommets
-    glBufferData(GL_ARRAY_BUFFER, 8*vertices.size(), floatVerticeArray, GL_STATIC_DRAW); //Placer les coordonnées de sommet dans le tampon
+    glBufferData(GL_ARRAY_BUFFER, 8*vertices.size()*sizeof(GLfloat), floatVerticeArray, GL_STATIC_DRAW); //Placer les coordonnées de sommet dans le tampon. Il y a 8 valeurs de la taille d'un float pour chaque sommet.
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id); //Travailler sur le tampon d'indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*triangles.size(), intIndiceArray, GL_STATIC_DRAW); //Placer indices de triangles dans le tampon
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*triangles.size()*sizeof(GLuint), intIndiceArray, GL_STATIC_DRAW); //Placer indices de triangles dans le tampon. Il y a 3 valeurs de la taille d'un uint pour chaque triangle.
 }
 
 
