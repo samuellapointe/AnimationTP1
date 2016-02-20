@@ -8,8 +8,8 @@ uniform vec3 light_pos;
 uniform vec3 cam_pos;
 
 // Attributs.
-in vec3     P;
-in vec3     N0;
+in vec3     position;
+in vec3     normale;
 
 vec3 light;
 
@@ -22,9 +22,9 @@ void main (void)
 {
     light = light_pos;
     
-    var_light_pos = normalize(light - P);
-    V = normalize(-P);
-    N = normal_matrix*normalize(N0);
+    var_light_pos = normalize(light - position);
+    V = normalize(-position);
+    N = normal_matrix*normalize(normale);
     
-    gl_Position	= modelview_proj_matrix*vec4(P, 1);
+    gl_Position	= modelview_proj_matrix*vec4(position, 1);
 }
