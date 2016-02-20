@@ -2,13 +2,13 @@
 
 
 vec3 H;
-vec4 ambiant;
-vec4 diffuse;
-vec4 specular;
+vec3 ambiant;
+vec3 diffuse;
+vec3 specular;
 vec4 Color;
 
 float factorLN;
-float factorNH;
+vec3 factorNH;
 
 out vec4    frag_color;
 
@@ -31,19 +31,18 @@ in vec3 cam_eye;
 
 void main (void)
 {
-    H = normalize(var_light_pos + V);
+    H = (var_light_pos + V)/2;
     ambiant = mat_ambient_color*ambiant_contrib;
     
-    factorLN = max(dot(var_light_pos,N),0.0);
+    factorLN = max(0, dot(var_light_pos,N));
     diffuse = factorLN * (mat_diffuse_color*diffuse_contrib);
     
-    factorNH = pow(max(dot(N,H),0.0),mat_shininess);
-    specular = factorNH * (spec_contrib * mat_spec_color);
+    specular = (mat_spec_color*spec_contrib)*pow(dot(H,V), mat_shininess);
     
-    if(dot(var_light_pos,N) < 0.0)
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
+    //if(dot(var_light_pos,N) < 0.0)
+     //   specular = vec4(1.0, 0.0, 0.0, 1.0);
     
-    Color = (ambiant + diffuse + specular);
+    Color = vec4(ambiant + diffuse + specular, 1);
     
     frag_color = Color;
 }
