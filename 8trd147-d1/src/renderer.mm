@@ -287,6 +287,7 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 
 -(void)set_ambiant_contrib:(float)val
 {
+    glUseProgram(shader_prog_name);
     GLuint loc = glGetUniformLocation(shader_prog_name, "ambiant_contrib");
     glUniform1f(loc, val);
 }
@@ -309,10 +310,10 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
 
 - (void)render:(CMesh*)mesh
 {
-    /*GLfloat viewdir_matrix[16];        // Matrice sans la translation (pour le cube map et le skybox).
+    GLfloat viewdir_matrix[16];        // Matrice sans la translation (pour le cube map et le skybox).
     GLfloat model_view_matrix[16];
     GLfloat projection_matrix[16];
-    GLfloat normal_matrix[9];    
+    GLfloat normal_matrix[9];
     GLfloat mvp_matrix[16];
     GLfloat vp_matrix[16];
     
@@ -335,10 +336,9 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
     
     mtx3x3FromTopLeftOf4x4(normal_matrix, model_view_matrix);
     mtx3x3Invert(normal_matrix, normal_matrix);
-
     
-    if ( mesh )
-    {
+    
+    if (mesh) {
         glUseProgram(shader_prog_name);
         
         glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
@@ -352,36 +352,6 @@ GLfloat rotx = 0.0, roty = 0.0, rotz = 0.0, camposz = -10.0;
         
         loc = glGetUniformLocation(shader_prog_name, "cam_pos");
         glUniform3f(loc, normal_matrix[6], normal_matrix[7], normal_matrix[8]);
-        
-        mesh->Draw(shader_prog_name);
-    }*/
-    
-    cout << "render";
-    
-    GLfloat model_view_matrix[16];
-    GLfloat projection_matrix[16];
-    GLfloat normal_matrix[9];
-    GLfloat mvp_matrix[16];
-    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    mtxLoadPerspective(projection_matrix, 50, (float)view_width/ (float)view_height, 1.0, 100.0);
-    mtxLoadTranslate(model_view_matrix, 0, 0.0, camposz);
-    mtxRotateXApply(model_view_matrix, rotx);
-    mtxRotateYApply(model_view_matrix, roty);
-    mtxRotateZApply(model_view_matrix, rotz);
-    
-    mtxMultiply(mvp_matrix, projection_matrix, model_view_matrix);
-    
-    mtx3x3FromTopLeftOf4x4(normal_matrix, model_view_matrix);
-    mtx3x3Invert(normal_matrix, normal_matrix);
-    
-    
-    if (mesh) {
-        glUseProgram(shader_prog_name);
-        
-        glUniformMatrix4fv(uniform_mvp_matrix_idx, 1, GL_FALSE, mvp_matrix);
-        glUniformMatrix3fv(uniform_normal_matrix_idx, 1, GL_FALSE, normal_matrix);
         
         mesh->Draw(shader_prog_name);
 

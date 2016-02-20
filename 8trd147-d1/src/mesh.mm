@@ -39,7 +39,16 @@ void print_debug(const CPoint3D& P)
 
 
 CVect3D CVertex::UpdateNormal() {
-    CVect3D N = CPoint3D(-P[1],P[0],P[2]);
+    int nbTriangles = this->triangles.size();
+    CVect3D somme = CPoint3D();
+    
+    //Pour chaque triangle adjacent
+    list<CTriangle*>::const_iterator monIt;
+    for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt) {
+        somme += (*monIt)->N;
+    }
+    
+    CVect3D N = somme/nbTriangles;
 
     return N;
 }
@@ -114,11 +123,18 @@ ostream& operator<<(ostream& os, const CMesh& m)
 
 void    CMesh::UpdateNormals()
 {
+    //D'abord, calculer les vecteurs pour chaque triangle
     list<CTriangle*>::const_iterator monIt;
     for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
     {
         (*monIt)->UpdateNormal();
     }
+    
+    //Ensuite, pour chaque point, faire la moyenne des normales des triangles adjacents
+    for (int i = 0; i < vertices.size(); i++) {
+        vertices[i]->UpdateNormal();
+    }
+
 }
 
 // Format du VBO: 
@@ -151,105 +167,40 @@ GLuint* put_triangle(const CTriangle& tri, GLuint* p)
     return p;
 }
 
-// Variables OpenGL
-GLuint diffuse_tex_id;          // Texture
-GLuint ogl_buf_vextex_id;       // VBO
-GLuint vao_id;
-GLuint ogl_buf_index_id;
-GLint attrib_position, attrib_normal, attrib_color;
-
-/*int sz_vertice = 10;
-GLfloat mesVertices[] =
-{
-    // Sommet 0
-    -1.0, 0.0, 0.0,     // Pos
-    -1.0, 1.0, 0.0,     // N
-    1.0, 0.0, 0.0, 1.0, // Couleur
-    
-    // Sommet 1
-    0.0, 1.0, 0.5,
-    0.0, 1.0, 0.0,
-    1.0, 1.0, 0.0, 1.0,
-    
-    // Sommet 2
-    1.0, 0.0, 0.0,
-    1.0, 1.0, 0.0,
-    0.0, 1.0, 0.0, 1.0,
-    
-    // Sommet 3
-    0.0, 1.0, -0.5,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0, 1.0,
-};
-
-// Tableau d'indice.
-GLint mesIndices[] = {
-    0, 1, 3, // Triangle 1
-    1, 2, 3  // Triangle 2
-};*/
 
 void    CMesh::AllocVBOData()
 {
-    /*vertices = std::vector<CVertex*>();
-    vertices.push_back(new CVertex(0, CPoint3D(-1.0f, 0.0f, 0.2f), 0.0, 0.0));
-    vertices.push_back(new CVertex(1, CPoint3D(0.1f, 1.0f, 0.5f), 0.0, 0.0));
-    vertices.push_back(new CVertex(2, CPoint3D(1.0f, 0.0f, 0.0f), 0.0, 0.0));
-    vertices.push_back(new CVertex(3, CPoint3D(0.0f, 1.0f, -0.5f), 0.0, 0.0));
-
-    triangles = std::list<CTriangle*>();
-    triangles.push_back(new CTriangle(vertices[0], vertices[1], vertices[3]));
-    triangles.push_back(new CTriangle(vertices[1], vertices[2], vertices[3]));*/
+    //Tableau de floats (coordonnées) à envoyer
+    GLfloat* floatVerticeArray = new GLfloat[8*vertices.size()]();
+    GLfloat* currentVertice = &floatVerticeArray[0]; //Iterateur
     
-    
-    GLfloat* myVertices = new GLfloat[8*vertices.size()]();
-    GLfloat* currentVertice = &myVertices[0];
-    
+    //Conversion de CVertex à float
     for (int i = 0; i < vertices.size(); i++) {
         currentVertice = put_vertex(*vertices[i], currentVertice);
     }
     
-    GLuint* myTriangles = new GLuint[3*triangles.size()]();
-    GLuint* currentTriangle = &myTriangles[0];
+    //Tableau d'entiers (indices) à envoyer
+    GLuint* intIndiceArray = new GLuint[3*triangles.size()]();
+    GLuint* currentTriangle = &intIndiceArray[0]; //Iterateur
     
+    //Conversion de CTriangle à int
     list<CTriangle*>::const_iterator monIt;
     for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt) {
         currentTriangle = put_triangle(*(*monIt), currentTriangle);
     }
     
-    
-    /*cout << "\n--- sommets ---\n";
-    tmpVertices = std::vector<float>();
-    for (int i = 0; i < vertices.size(); i++) {
-        cout << vertices[i]->P[0] << ", " << vertices[i]->P[1] << ", " << vertices[i]->P[2] << "\n";
-        tmpVertices.push_back(vertices[i]->P[0]);
-        tmpVertices.push_back(vertices[i]->P[1]);
-        tmpVertices.push_back(vertices[i]->P[2]);
-    }
-    
-    cout << "--- indices ---\n";
-    
-    tmpTriangles = std::vector<float>();
-    list<CTriangle*>::const_iterator monIt;
-    for(monIt = triangles.begin(); monIt != triangles.end(); ++monIt)
-    {
-        cout << (*monIt)->v0->idx << ", " << (*monIt)->v1->idx << ", " << (*monIt)->v2->idx << "\n";
-        tmpTriangles.push_back((*monIt)->v0->idx);
-        tmpTriangles.push_back((*monIt)->v1->idx);
-        tmpTriangles.push_back((*monIt)->v2->idx);
-    }*/
-    
     glGenVertexArrays(1, &vao_id); //Place 1 nom de tableau de sommets dans vao_id
     glBindVertexArray(vao_id); //Dire à openGL d'utiliser ce tableau de sommets
     
-    glGenBuffers(1, &ogl_buf_vextex_id); //Créer un tampon pour les sommets?
-    glGenBuffers(1, &ogl_buf_index_id); //Créer un tampon pour les indices?
+    glGenBuffers(1, &ogl_buf_vextex_id); //Créer un tampon pour les sommets
+    glGenBuffers(1, &ogl_buf_index_id); //Créer un tampon pour les indices
     
     // Transfert des données vers la carte graphique.
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id); //Dire à openGL de travailler sur le tampon de sommets
-    glBufferData(GL_ARRAY_BUFFER, 8*vertices.size(), myVertices, GL_STATIC_DRAW); //Placer des données dans le tampon
+    glBufferData(GL_ARRAY_BUFFER, 8*vertices.size()*sizeof(GLfloat), floatVerticeArray, GL_STATIC_DRAW); //Placer les coordonnées de sommet dans le tampon. Il y a 8 valeurs de la taille d'un float pour chaque sommet.
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ogl_buf_index_id); //Travailler sur le tampon d'indices
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*triangles.size(), myTriangles, GL_STATIC_DRAW); //Placer les données dans le tampon
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*triangles.size()*sizeof(GLuint), intIndiceArray, GL_STATIC_DRAW); //Placer indices de triangles dans le tampon. Il y a 3 valeurs de la taille d'un uint pour chaque triangle.
 }
 
 
@@ -309,7 +260,7 @@ bool ReadPLYHeader(std::ifstream& f_in, int& nb_vtx, int& nb_tri)
 
 //** Vous aurez éventuellement à changer ces valeurs pour que votre maillage s'affiche correctement.
 static float scale = 1.0;
-static float yoffset = 0.0;
+static float yoffset = -1.0;
 bool CMesh::ReadPLY(std::ifstream& f_in)
 {
     int bufsz = 256;
@@ -388,8 +339,8 @@ bool CMesh::ReadPLY(std::ifstream& f_in)
 void CMesh::Draw(GLint prog)
 {
     
-    attrib_position = glGetAttribLocation(prog, "P"); //Attribut de position dans le vertex shader
-    attrib_normal = glGetAttribLocation(prog, "N0");
+    attrib_position = glGetAttribLocation(prog, "position"); //Attribut de position dans le vertex shader
+    attrib_normal = glGetAttribLocation(prog, "normale");
     //attrib_texcoord = glGetAttribLocation(prog, "C0");
     
     glBindVertexArray(vao_id); //Travailler sur ce tableau
@@ -405,8 +356,6 @@ void CMesh::Draw(GLint prog)
     glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, 0);
     glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
     //glVertexAttribPointer(attrib_texcoord, 2, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
-    
-    cout << triangles.size();
     
     glDrawElements(GL_TRIANGLES, 3*triangles.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
 }
