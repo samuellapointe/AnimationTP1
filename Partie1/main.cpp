@@ -73,6 +73,19 @@ void executeCommand(string command)
 // Commande: gensurfevol 1 30 0.2 /Users/etudiant/Desktop/AnimationTP1/1.ply
 // Commande: gensurfevol 2 30 0.2 /Users/etudiant/Desktop/AnimationTP1/2.ply
 // Commande: gensurfevol 3 30 0.2 /Users/etudiant/Desktop/AnimationTP1/3.ply
+
+// Formes acceptables et spéciales
+// Commande: gensurfevol 1 2 0.05 /Users/etudiant/Desktop/AnimationTP1/1.ply
+
+// Commande: gensurfevol 2 1 0.01 /Users/etudiant/Desktop/AnimationTP1/2.ply // Très lourd pour apperçu (boule)
+// Commande: gensurfevol 2 2 0.05 /Users/etudiant/Desktop/AnimationTP1/2.ply
+
+// Commande: gensurfevol 3 2 0.05 /Users/etudiant/Desktop/AnimationTP1/3.ply
+
+// test
+// Commande: gensurfevol 1 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/1.ply
+// Commande: gensurfevol 2 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/2.ply
+// Commande: gensurfevol 3 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/3.ply
 int main(int argc, const char * argv[]) {
     std::cout << "Début" << endl;
     
