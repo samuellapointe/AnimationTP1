@@ -18,7 +18,7 @@ out vec3 var_light_pos;
 void main (void)
 {
     var_light_pos = normalize(light_pos - position);
-    V = normalize(cam_pos-position);
+    V = normalize(0-position);
     N = normalize(normal_matrix*normale);
     
     gl_Position	= modelview_proj_matrix*vec4(position, 1);

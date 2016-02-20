@@ -49,7 +49,7 @@ CVect3D CVertex::UpdateNormal() {
     }
     
     CVect3D N = somme/nbTriangles;
-
+    this->N = Normalise(N);
     return N;
 }
 
@@ -354,7 +354,7 @@ void CMesh::Draw(GLint prog)
     
     int stride = 8*sizeof(GLfloat);
     glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, stride, 0);
-    glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
+    glVertexAttribPointer(attrib_normal, 3, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(12));
     //glVertexAttribPointer(attrib_texcoord, 2, GL_FLOAT, GL_FALSE,  stride, BUFFER_OFFSET(24));
     
     glDrawElements(GL_TRIANGLES, 3*triangles.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
