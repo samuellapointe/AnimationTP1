@@ -14,14 +14,12 @@ in vec3     normale;
 out vec3 N;
 out vec3 V;
 out vec3 var_light_pos;
-out vec3 cam_eye;
 
 void main (void)
 {
     var_light_pos = normalize(light_pos - position);
-    V = normalize(-position);
-    N = normal_matrix*normalize(normale);
+    V = normalize(cam_pos-position);
+    N = normalize(normal_matrix*normale);
     
-    cam_eye = cam_pos;
     gl_Position	= modelview_proj_matrix*vec4(position, 1);
 }

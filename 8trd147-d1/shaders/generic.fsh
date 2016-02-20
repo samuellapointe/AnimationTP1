@@ -27,20 +27,17 @@ in vec3 var_light_pos;
 in vec3 N;
 in vec3 V;
 
-in vec3 cam_eye;
-
 void main (void)
 {
     H = (var_light_pos + V)/2;
+    vec3 R = normalize(-reflect(var_light_pos, N));
+    vec3 E = normalize(-V);
+    
     ambiant = mat_ambient_color*ambiant_contrib;
     
-    factorLN = max(dot(var_light_pos, N), 0);
-    diffuse = clamp(factorLN * (mat_diffuse_color*diffuse_contrib), 0, 1);
+    diffuse = clamp((mat_diffuse_color*diffuse_contrib) * max(dot(N, var_light_pos), 0.0), 0, 1);
     
-    specular = (mat_spec_color*spec_contrib)*pow(dot(H,V), mat_shininess);
-    
-    if(dot(var_light_pos,N) < 0.0)
-        specular = vec3(0.0, 0.0, 0.0);
+    specular = clamp((mat_spec_color*spec_contrib)*pow(max(dot(R, E),0.0), mat_shininess), 0.0, 1.0);
     
     Color = vec4(ambiant + diffuse + specular, 1);
     
