@@ -82,10 +82,17 @@ void executeCommand(string command)
 
 // Commande: gensurfevol 3 2 0.05 /Users/etudiant/Desktop/AnimationTP1/3.ply
 
-// test
-// Commande: gensurfevol 1 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/1.ply
-// Commande: gensurfevol 2 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/2.ply
-// Commande: gensurfevol 3 1.2 0.04 /Users/etudiant/Desktop/AnimationTP1/3.ply
+// Formes vraiments pas pires avec beaucoup de points!  À utiliser si pas mieux.
+// Commande: gensurfevol 1 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/1.ply
+// Commande: gensurfevol 2 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/2.ply
+// Commande: gensurfevol 3 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/3.ply
+
+// Tests
+// Commande: gensurfevol 1 180 1 /Users/etudiant/Desktop/AnimationTP1/1.ply
+// Commande: gensurfevol 2 180 1 /Users/etudiant/Desktop/AnimationTP1/2.ply
+// Commande: gensurfevol 3 360 1 /Users/etudiant/Desktop/AnimationTP1/3.ply
+
+// Commande: gensurfevol 3 3.141590 1 /Users/etudiant/Desktop/AnimationTP1/3.ply
 int main(int argc, const char * argv[]) {
     std::cout << "Début" << endl;
     

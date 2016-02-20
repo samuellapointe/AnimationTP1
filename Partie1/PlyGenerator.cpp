@@ -141,7 +141,7 @@ void PlyGenerator::generateVertices()
     for(float currentY = 0; currentY <= (float)maxY; currentY += y)
     {
         nbPointsRangee = 0;
-        for(float currentDelta = 0; currentDelta <= (float)360; currentDelta += delta)
+        for(float currentDelta = 0; currentDelta <= (float)M_2_PI; currentDelta += delta)
         {
             CPoint3D x = surfrevol(currentDelta, currentY, f);
             vertices.push_back(x);
