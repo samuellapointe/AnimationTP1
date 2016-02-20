@@ -69,10 +69,10 @@ public:
     
     void UpdateNormal()
     {
-        CVect3D vecteur1 = *v0-*v1;
+        CVect3D vecteur1 = CPoint3D(*v0-*v1);
         CVect3D vecteur2 = *v0-*v2;
-        
-        N = ProdVect(vecteur1,vecteur2);
+ 
+        N = Normalise(ProdVect(vecteur1,vecteur2));
     }
 
 //protected:

@@ -11,8 +11,6 @@ uniform vec3 cam_pos;
 in vec3     position;
 in vec3     normale;
 
-vec3 light;
-
 out vec3 N;
 out vec3 V;
 out vec3 var_light_pos;
@@ -20,9 +18,7 @@ out vec3 var_light_pos;
 
 void main (void)
 {
-    light = light_pos;
-    
-    var_light_pos = normalize(light - position);
+    var_light_pos = normalize(light_pos - position);
     V = normalize(-position);
     N = normal_matrix*normalize(normale);
     
