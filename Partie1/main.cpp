@@ -1,18 +1,8 @@
-//
-//  main.cpp
-//  Partie1
-//
-//  Created by Etudiant on 2016-02-01.
-//  Copyright © 2016 Etudiant. All rights reserved.
-//
-
 #include <iostream>
 #include "PlyGenerator.h"
 #include <string>
 
 using namespace std;
-
-
 
 std::vector<string> splitCommandTokens(std::string command)
 {
@@ -70,29 +60,20 @@ void executeCommand(string command)
     cout << resultat << endl;
 }
 
-// Commande: gensurfevol 1 30 0.2 /Users/etudiant/Desktop/AnimationTP1/1.ply
-// Commande: gensurfevol 2 30 0.2 /Users/etudiant/Desktop/AnimationTP1/2.ply
-// Commande: gensurfevol 3 30 0.2 /Users/etudiant/Desktop/AnimationTP1/3.ply
+// ATTENTION
+// Pour la fonction 1: Un delta  de 0.01 semble planter le viewer.
+// Pour la fonction 3: Un y de moins de 0.05 semble planter le viewer.
 
-// Formes acceptables et spéciales
-// Commande: gensurfevol 1 2 0.05 /Users/etudiant/Desktop/AnimationTP1/1.ply
-
-// Commande: gensurfevol 2 1 0.01 /Users/etudiant/Desktop/AnimationTP1/2.ply // Très lourd pour apperçu (boule)
-// Commande: gensurfevol 2 2 0.05 /Users/etudiant/Desktop/AnimationTP1/2.ply
-
-// Commande: gensurfevol 3 2 0.05 /Users/etudiant/Desktop/AnimationTP1/3.ply
-
-// Formes vraiments pas pires avec beaucoup de points!  À utiliser si pas mieux.
+// Formes lisses et plus arrondies.
 // Commande: gensurfevol 1 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/1.ply
 // Commande: gensurfevol 2 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/2.ply
-// Commande: gensurfevol 3 0.5 0.01 /Users/etudiant/Desktop/AnimationTP1/3.ply
+// Commande: gensurfevol 3 0.5 0.05 /Users/etudiant/Desktop/AnimationTP1/3.ply
 
-// Tests
-// Commande: gensurfevol 1 180 1 /Users/etudiant/Desktop/AnimationTP1/1.ply
-// Commande: gensurfevol 2 180 1 /Users/etudiant/Desktop/AnimationTP1/2.ply
-// Commande: gensurfevol 3 360 1 /Users/etudiant/Desktop/AnimationTP1/3.ply
+// Formes avec un maillage moins lisse, afin de mieux voir les polygones.
+// Commande: gensurfevol 1 0.8 0.1 /Users/etudiant/Desktop/AnimationTP1/1.ply
+// Commande: gensurfevol 2 0.8 0.1 /Users/etudiant/Desktop/AnimationTP1/2.ply
+// Commande: gensurfevol 3 1 0.1 /Users/etudiant/Desktop/AnimationTP1/3.ply
 
-// Commande: gensurfevol 3 3.141590 1 /Users/etudiant/Desktop/AnimationTP1/3.ply
 int main(int argc, const char * argv[]) {
     std::cout << "Début" << endl;
     
